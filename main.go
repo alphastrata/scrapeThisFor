@@ -19,16 +19,12 @@ func main() {
 	rawURL := os.Args[1]
 	keyword := os.Args[2]
 
-	// Parse the URL to ensure it's valid.
 	u, err := url.Parse(rawURL)
 	if err != nil {
 		fmt.Println("Error: invalid URL")
 		return
 	}
 
-	// Create a progress bar.
-
-	// Make the HTTP request and read the response body.
 	resp, err := http.Get(u.String())
 	if err != nil {
 		fmt.Println("Error:", err)
@@ -42,7 +38,6 @@ func main() {
 		return
 	}
 
-	// Parse the HTML and extract the links.
 	doc, err := html.Parse(strings.NewReader(string(body)))
 	if err != nil {
 		fmt.Println("Error:", err)
@@ -51,7 +46,6 @@ func main() {
 
 	hrefs := extractHrefs(doc)
 
-	// Filter the links by keyword and make them absolute.
 	var filteredHrefs []string
 	for _, href := range hrefs {
 		absURL, err := u.Parse(href)
@@ -62,12 +56,10 @@ func main() {
 			filteredHrefs = append(filteredHrefs, absURL.String())
 		}
 	}
-	// Print the filtered links.
 	for _, href := range filteredHrefs {
 		fmt.Println(href)
 	}
 
-	// Stop the progress bar.
 }
 
 func extractHrefs(n *html.Node) []string {
