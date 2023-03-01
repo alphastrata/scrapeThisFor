@@ -4,6 +4,7 @@ import (
 	"fmt"
 	"io/ioutil"
 	"net/http"
+	"net/url"
 	"os"
 	"strings"
 
@@ -15,11 +16,20 @@ func main() {
 		fmt.Println("Usage: myScrape url keyword")
 		return
 	}
-
-	url := os.Args[1]
+	rawURL := os.Args[1]
 	keyword := os.Args[2]
 
-	resp, err := http.Get(url)
+	// Parse the URL to ensure it's valid.
+	u, err := url.Parse(rawURL)
+	if err != nil {
+		fmt.Println("Error: invalid URL")
+		return
+	}
+
+	// Create a progress bar.
+
+	// Make the HTTP request and read the response body.
+	resp, err := http.Get(u.String())
 	if err != nil {
 		fmt.Println("Error:", err)
 		return
@@ -32,6 +42,7 @@ func main() {
 		return
 	}
 
+	// Parse the HTML and extract the links.
 	doc, err := html.Parse(strings.NewReader(string(body)))
 	if err != nil {
 		fmt.Println("Error:", err)
@@ -39,11 +50,24 @@ func main() {
 	}
 
 	hrefs := extractHrefs(doc)
-	filteredHrefs := filterHrefs(hrefs, keyword)
 
+	// Filter the links by keyword and make them absolute.
+	var filteredHrefs []string
+	for _, href := range hrefs {
+		absURL, err := u.Parse(href)
+		if err != nil {
+			continue // Skip invalid URLs.
+		}
+		if strings.Contains(absURL.String(), keyword) {
+			filteredHrefs = append(filteredHrefs, absURL.String())
+		}
+	}
+	// Print the filtered links.
 	for _, href := range filteredHrefs {
 		fmt.Println(href)
 	}
+
+	// Stop the progress bar.
 }
 
 func extractHrefs(n *html.Node) []string {
@@ -66,16 +90,4 @@ func extractHrefs(n *html.Node) []string {
 	}
 
 	return hrefs
-}
-
-func filterHrefs(hrefs []string, keyword string) []string {
-	var filteredHrefs []string
-
-	for _, href := range hrefs {
-		if strings.Contains(href, keyword) {
-			filteredHrefs = append(filteredHrefs, href)
-		}
-	}
-
-	return filteredHrefs
 }
