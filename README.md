@@ -51,4 +51,4 @@ Run it with the 'download' arg to make it download all of the hits in parallel:
 
 > Or:
 
-1. `go get github.com/alphastrata/scrapeForThis`
+1. `go install github.com/alphastrata/scrapeThisFor@latest`
