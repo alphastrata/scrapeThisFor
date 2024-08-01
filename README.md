@@ -2,15 +2,17 @@
 
 A command line tool for scraping URLs that contain a given keyword and downloading their contents.
 
-## Roadmap:
+## Roadmap
+
 - Nil, this is feature complete for what I needed.
+
 ---
 
-## Requirements:
+## Requirements
 
 1. Clone this repo: `git clone https://github.com/alphastrata/scrapeThisFor.git`
 
-2. Golang >= 1.18
+2. Golang >= 1.20
 
 3. A working internet connection (for `go mod` to work) and for the app to download content.
 
@@ -20,15 +22,18 @@ A command line tool for scraping URLs that contain a given keyword and downloadi
 
 **Note**: You may need to restart your machine/re-login to your shell (depending on your OS).
 
-## Building:
+## Building
 
 1. Run `go mod tidy` to download the required packages.
 2. Run `go build main.go` to build the application.
 
-## Example Usage:
-* This command: 
-`go run main.go https://huggingface.co/bigscience/bloom/tree/main model_000`
-* will produce:
+## Example Usage
+
+- This command:
+`go run . https://huggingface.co/bigscience/bloom/tree/main model_000`
+
+- will produce:
+
 ```bash
 https://huggingface.co/bigscience/bloom/blob/main/model_00001-of-00072.safetensors
 https://huggingface.co/bigscience/bloom/resolve/main/model_00001-of-00072.safetensors
@@ -36,8 +41,14 @@ https://huggingface.co/bigscience/bloom/resolve/main/model_00001-of-00072.safete
 https://huggingface.co/bigscience/bloom/blob/main/model_00045-of-00072.safetensors
 https://huggingface.co/bigscience/bloom/resolve/main/model_00045-of-00072.safetensors
 ```
-## Installation:
+
+Run it with the 'download' arg to make it download all of the hits in parallel:
+`go run . https://huggingface.co/bigscience/bloom/tree/main model_000 download`
+
+## Installation
+
 1. `go build -o scrapeThisFor main.go`
-2. `sudo mv QuickScraper /usr/local/bin/` or it may be `/usr/bin` if that's your thing.
+
 > Or:
+
 1. `go get github.com/alphastrata/scrapeForThis`
